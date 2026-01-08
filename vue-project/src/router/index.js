@@ -36,6 +36,11 @@ const router = createRouter({
           path: 'infos',
           name: 'cagnotte-infos',
           component: CagnotteInfos
+        },
+        {
+          path: 'donations',
+          name: 'cagnotte-donations',
+          component: () => import('../views/Donations.vue')
         }
       ]
     }
