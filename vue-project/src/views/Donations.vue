@@ -154,6 +154,73 @@ export default {
 </script>
 
 <style scoped>
+.donation-form {
+    background: #f1f8e9;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+}
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+.form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.form-group input, .form-group textarea {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.form-actions {
+    display: flex;
+    gap: 10px;
+}
+.btn-submit {
+    background-color: #43a047;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.btn-cancel {
+    background-color: #757575;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.error { color: red; margin-top: 10px; }
+
+.donations-list-wrapper {
+    margin-top: 20px;
+}
+
+/* Animations transitions */
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+.list-move {
+  transition: transform 0.5s ease;
+}
+
 .empty {
     text-align: center;
     color: #999;
