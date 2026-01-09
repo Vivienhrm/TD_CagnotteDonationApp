@@ -1,7 +1,15 @@
 <template>
   <div class="cagnotte-details" v-if="cagnotte">
     <div class="header">
-        <h1>{{ cagnotte.name }}</h1>
+        <div class="header-main">
+            <h1>{{ cagnotte.name }}</h1>
+            <p class="summary-stats">
+                <strong>Récolté :</strong> {{ formatAmount(currentAmount) }} / {{ formatAmount(cagnotte.goal) }}
+                <span class="remaining" :class="{ over: isOverfunded }">
+                    (Reste : {{ formatAmount(remainingAmount) }})
+                </span>
+            </p>
+        </div>
         <div class="actions">
             <router-link :to="`/cagnottes/${cagnotte.id}/edit`" class="btn btn-edit">Éditer</router-link>
             <button @click="deleteCagnotte" class="btn btn-delete">Supprimer</button>
@@ -27,14 +35,35 @@ export default {
       cagnotte: null
     }
   },
+  computed: {
+    currentAmount() {
+        return this.cagnotte.donations?.reduce((sum, d) => sum + parseFloat(d.amount), 0) || 0;
+    },
+    remainingAmount() {
+        return this.cagnotte.goal - this.currentAmount;
+    },
+    isOverfunded() {
+        return this.remainingAmount < 0;
+    }
+  },
   mounted() {
     this.fetchCagnotte();
   },
   methods: {
     async fetchCagnotte() {
       try {
-        const response = await this.$api.get(`/api/cagnottes/${this.$route.params.id}`);
-        this.cagnotte = response.data;
+        const id = this.$route.params.id;
+        // Fetch both simultaneously
+        const [cagnotteRes, donationsRes] = await Promise.all([
+            this.$api.get(`/api/cagnottes/${id}`),
+            this.$api.get(`/api/cagnottes/${id}/donations`)
+        ]);
+        
+        // Merge donations into the cagnotte object
+        this.cagnotte = {
+            ...cagnotteRes.data,
+            donations: donationsRes.data
+        };
       } catch (error) {
         console.error("Erreur chargement cagnotte", error);
         alert("Impossible de charger cette cagnotte.");
@@ -59,9 +88,13 @@ export default {
 .header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     margin-bottom: 20px;
 }
+.header-main h1 { margin: 0; }
+.summary-stats { margin: 5px 0 0 0; color: #555; }
+.remaining { margin-left: 10px; font-weight: 500; }
+.remaining.over { color: #2e7d32; }
 .actions {
     display: flex;
     gap: 10px;

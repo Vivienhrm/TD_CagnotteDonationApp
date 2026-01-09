@@ -4,10 +4,13 @@
     <div class="description">{{ cutText(cagnotte.description) }}</div>
     
     <div class="progress-bar">
-        <div class="progress" :style="{ width: progress + '%' }"></div>
+        <div class="progress" :style="{ width: Math.min(100, progress) + '%' }"></div>
     </div>
     <div class="stats">
-        <span>{{ progress }}%</span>
+        <span :class="{ over: isOverfunded }">
+            {{ progress }}% 
+            <small>(Reste : {{ formatAmount(remainingAmount) }})</small>
+        </span>
         <span>Fin le : {{ dbDateToFr(cagnotte.end_date) }}</span>
     </div>
   </div>
@@ -26,13 +29,19 @@ export default {
     progress() {
         if (!this.cagnotte.goal || !this.cagnotte.current_amount) return 0;
         const p = (this.cagnotte.current_amount / this.cagnotte.goal) * 100;
-        return Math.min(100, Math.round(p)); 
+        return Math.round(p); 
     },
     daysRemaining() {
         const today = new Date();
         const end = new Date(this.cagnotte.end_date);
         const diffTime = end - today;
         return Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    },
+    isOverfunded() {
+        return this.remainingAmount < 0;
+    },
+    remainingAmount() {
+        return this.cagnotte.goal - (this.cagnotte.current_amount || 0);
     },
     statusClass() {
         const diff = this.daysRemaining;
@@ -89,6 +98,8 @@ export default {
     color: #555;
     margin-top: 8px;
 }
+.over { color: #2e7d32; font-weight: bold; }
+.stats small { color: #666; font-weight: normal; }
 .status-blue {
     background-color: #e3f2fd;
 }

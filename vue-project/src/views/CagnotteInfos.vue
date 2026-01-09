@@ -19,7 +19,7 @@
         </div>
         <div class="info-item">
             <label>Montant restant</label>
-            <p>{{ formatAmount(Math.max(0, cagnotte.goal - currentAmount)) }}</p>
+            <p>{{ formatAmount(cagnotte.goal - currentAmount) }}</p>
         </div>
         <div class="info-item">
             <label>% d'atteinte</label>
@@ -54,7 +54,7 @@ export default {
     },
     progress() {
         if (!this.cagnotte.goal) return 0;
-        return Math.min(100, Math.round((this.currentAmount / this.cagnotte.goal) * 100));
+        return Math.round((this.currentAmount / this.cagnotte.goal) * 100);
     },
     daysRemaining() {
         const today = new Date();
