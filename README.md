@@ -69,8 +69,8 @@ src/
 
 1. Cloner le dépôt :
    ```bash
-   git clone <https://github.com/Vivienhrm/TD_CagnotteDonationApp>
-   cd TD_CagnotteDonationApp/vue-project
+   git clone https://github.com/Vivienhrm/TD_CagnotteDonationApp
+   cd TD_CagnotteDonationApp
    ```
 
 2. Installer les dépendances :
@@ -91,7 +91,6 @@ La clé API est configurée dans le fichier `src/main.js`. Assurez-vous d'avoir 
 
 1. Démarrer le serveur de développement :
    ```bash
-   cd vue-project
    npm run dev
    ```
 2. Accéder à l'application via `http://localhost:5173`.
