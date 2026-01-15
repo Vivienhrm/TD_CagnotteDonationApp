@@ -12,7 +12,7 @@
         </div>
         <div class="actions">
             <router-link :to="`/cagnottes/${cagnotte.id}/edit`" class="btn btn-edit">Éditer</router-link>
-            <button @click="deleteCagnotte" class="btn btn-delete">Supprimer</button>
+            <router-link to="/" class="btn btn-home">Retour à l'accueil</router-link>
         </div>
     </div>
 
@@ -58,7 +58,7 @@ export default {
             this.$api.get(`/api/cagnottes/${id}`),
             this.$api.get(`/api/cagnottes/${id}/donations`)
         ]);
-        
+
         // Merge donations into the cagnotte object
         this.cagnotte = {
             ...cagnotteRes.data,
@@ -75,7 +75,8 @@ export default {
             try {
                 await this.$api.delete(`/api/cagnottes/${this.$route.params.id}`);
                 this.$router.push('/');
-            } catch (e) {
+            } catch (error) {
+                console.error("Erreur lors de la suppression", error);
                 alert("Erreur lors de la suppression.");
             }
         }
@@ -110,6 +111,7 @@ export default {
 }
 .btn-edit { background-color: #2196f3; }
 .btn-delete { background-color: #f44336; }
+.btn-home { background-color: #607d8b; }
 
 .tabs {
     display: flex;

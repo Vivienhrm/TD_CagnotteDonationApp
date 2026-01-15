@@ -1,7 +1,7 @@
 <template>
   <div class="create-cagnotte">
     <h1>Créer une nouvelle cagnotte</h1>
-    
+
     <form @submit.prevent="createCagnotte" class="form">
         <div class="form-group">
             <label>Nom</label>
@@ -23,10 +23,14 @@
             <input type="date" v-model="form.end_date" required>
         </div>
 
-        <button type="submit" class="submit-btn" :disabled="loading">
-            {{ loading ? 'Création...' : 'Créer la cagnotte' }}
-        </button>
-        
+        <div class="actions">
+            <button type="submit" class="btn btn-save" :disabled="loading">
+                {{ loading ? 'Création...' : 'Créer' }}
+            </button>
+            <button type="button" @click="$router.back()" class="btn btn-cancel">Retour</button>
+            <router-link to="/" class="btn btn-home">Retour à l'accueil</router-link>
+        </div>
+
         <div v-if="error" class="error">{{ error }}</div>
     </form>
   </div>
@@ -75,14 +79,30 @@ export default {
     display: flex;
     flex-direction: column;
 }
-.submit-btn {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px;
+.actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 1rem;
+}
+.btn {
+    padding: 10px 20px;
     border: none;
     cursor: pointer;
     border-radius: 4px;
     font-size: 1rem;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+}
+.btn-save {
+    background-color: #4CAF50;
+}
+.btn-cancel {
+    background-color: #9e9e9e;
+}
+.btn-home {
+    background-color: #2196F3;
 }
 .error {
     color: red;
