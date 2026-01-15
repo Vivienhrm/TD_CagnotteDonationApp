@@ -1,7 +1,7 @@
 <template>
   <div class="donations-container">
     <h3>{{ isEditing ? 'Modifier la donation' : 'Nouvelle donation' }}</h3>
-    
+
     <form @submit.prevent="submitForm" class="donation-form">
         <div class="form-row">
             <div class="form-group">
@@ -17,14 +17,14 @@
             <label>Commentaire</label>
             <textarea v-model="form.comment" placeholder="Laisser un message..."></textarea>
         </div>
-        
+
         <div class="form-actions">
             <button type="submit" class="btn btn-submit" :disabled="loading">
                 {{ loading ? 'Envoi...' : (isEditing ? 'Mettre à jour' : 'Ajouter') }}
             </button>
             <button v-if="isEditing" type="button" @click="resetForm" class="btn btn-cancel">Annuler</button>
         </div>
-        
+
         <div v-if="error" class="error">{{ error }}</div>
     </form>
 
@@ -32,11 +32,11 @@
 
     <div class="donations-list-wrapper">
         <h4>Liste des donations ({{ donations.length }})</h4>
-        
+
         <TransitionGroup name="list" tag="div" class="donations-list">
-            <Donation 
-                v-for="donation in sortedDonations" 
-                :key="donation.id" 
+            <Donation
+                v-for="donation in sortedDonations"
+                :key="donation.id"
                 :donation="donation"
                 @edit="prepareEdit"
                 @delete="deleteDonation"
@@ -54,7 +54,7 @@
 import Donation from '@/components/Donation.vue'
 
 export default {
-  name: 'Donations',
+  name: 'DonationsView',
   components: { Donation },
   props: {
     cagnotte: { type: Object, required: true }
@@ -108,7 +108,8 @@ export default {
             }
             this.resetForm();
             this.$emit('refresh'); // Refresh parent Cagnotte stats
-        } catch (e) {
+        } catch (error) {
+            console.error("Erreur lors de la validation", error);
             this.error = "Une erreur est survenue lors de la validation.";
         } finally {
             this.loading = false;
@@ -130,7 +131,8 @@ export default {
             await this.$api.delete(`/api/cagnottes/${id}/donations/${did}`);
             this.donations = this.donations.filter(d => d.id !== did);
             this.$emit('refresh'); // Refresh parent Cagnotte stats
-        } catch (e) {
+        } catch (error) {
+            console.error("Erreur lors de la suppression", error);
             alert("Erreur lors de la suppression.");
         }
     },

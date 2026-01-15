@@ -2,13 +2,13 @@
   <div class="cagnotte-card" :class="statusClass" @click="goToDetails">
     <h3>{{ cagnotte.name }}</h3>
     <div class="description">{{ cutText(cagnotte.description) }}</div>
-    
+
     <div class="progress-bar">
         <div class="progress" :style="{ width: Math.min(100, progress) + '%' }"></div>
     </div>
     <div class="stats">
         <span :class="{ over: isOverfunded }">
-            {{ progress }}% 
+            {{ progress }}%
             <small>(Reste : {{ formatAmount(remainingAmount) }})</small>
         </span>
         <span>Fin le : {{ dbDateToFr(cagnotte.end_date) }}</span>
@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  name: 'Cagnotte',
+  name: 'CagnotteCard',
   props: {
     cagnotte: {
         type: Object,
@@ -29,13 +29,13 @@ export default {
     progress() {
         if (!this.cagnotte.goal || !this.cagnotte.current_amount) return 0;
         const p = (this.cagnotte.current_amount / this.cagnotte.goal) * 100;
-        return Math.round(p); 
+        return Math.round(p);
     },
     daysRemaining() {
         const today = new Date();
         const end = new Date(this.cagnotte.end_date);
         const diffTime = end - today;
-        return Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+        return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     },
     isOverfunded() {
         return this.remainingAmount < 0;

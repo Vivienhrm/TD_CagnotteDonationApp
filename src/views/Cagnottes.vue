@@ -12,9 +12,9 @@
             Aucune cagnotte en cours.
         </div>
         <div class="cagnotte-list">
-            <Cagnotte 
-                v-for="cagnotte in activeCagnottes" 
-                :key="cagnotte.id" 
+            <Cagnotte
+                v-for="cagnotte in activeCagnottes"
+                :key="cagnotte.id"
                 :cagnotte="cagnotte"
             />
         </div>
@@ -34,9 +34,9 @@
             Aucune cagnotte terminée.
         </div>
         <div class="cagnotte-list">
-            <Cagnotte 
-                v-for="cagnotte in finishedCagnottes" 
-                :key="cagnotte.id" 
+            <Cagnotte
+                v-for="cagnotte in finishedCagnottes"
+                :key="cagnotte.id"
                 :cagnotte="cagnotte"
             />
         </div>
@@ -48,7 +48,7 @@
 import Cagnotte from '@/components/Cagnotte.vue'
 
 export default {
-  name: 'Cagnottes',
+  name: 'CagnottesView',
   components: {
     Cagnotte
   },
@@ -84,18 +84,19 @@ export default {
       try {
         const response = await this.$api.get('/api/cagnottes');
         const cagnottes = response.data;
-        
+
         // Parallel fetch for donations of each cagnotte to get current amounts
         const cagnottesWithDonations = await Promise.all(cagnottes.map(async (c) => {
             try {
                 const donationsRes = await this.$api.get(`/api/cagnottes/${c.id}/donations`);
                 const currentAmount = donationsRes.data.reduce((sum, d) => sum + parseFloat(d.amount), 0);
                 return { ...c, current_amount: currentAmount };
-            } catch (e) {
+            } catch (error) {
+                console.error("Erreur chargement donations", error);
                 return { ...c, current_amount: 0 };
             }
         }));
-        
+
         this.cagnottes = cagnottesWithDonations;
       } catch (error) {
         console.error("Erreur chargement cagnottes", error);

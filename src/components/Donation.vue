@@ -19,7 +19,7 @@
 
 <script>
 export default {
-  name: 'Donation',
+  name: 'DonationItem',
   props: {
     donation: {
         type: Object,
